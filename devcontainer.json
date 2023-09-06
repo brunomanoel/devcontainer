@@ -1,0 +1,44 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+    "name": "Node.js & TypeScript",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "dockerFile": "Dockerfile",
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    "features": {
+        "ghcr.io/devcontainers-contrib/features/jest:2": {}
+    },
+    "mounts": [
+        //share chezmoi config to fill init template
+        "source=${localEnv:HOME}/.config/chezmoi/chezmoi.toml,target=/home/${containerEnv:USER}/.config/chezmoi/chezmoi.toml,type=bind,consistency=cached",
+        //persist command history
+        "source=${localEnv:HOME}/workspaces/.commandhistory,target=/commandhistory,type=bind"
+    ],
+    "build": {
+        "args": {
+            "STACK": "typescript-node",
+            "VERSION": "20",
+            "DEBIAN": "bookworm", // buster = 10 | bullseye = 11 | bookworm = 12 | sid = unstable
+            "USERNAME": "bruno"
+        }
+    },
+    // "runArgs": ["--network", "host"]
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": "yarn install",
+    // Configure tool-specific properties.
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "orta.vscode-jest",
+                "yoavbls.pretty-ts-errors"
+            ]
+        }
+    },
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    "remoteUser": "bruno",
+    "containerUser": "bruno"
+}
